@@ -8,10 +8,10 @@
 - Relais and valve
 
 ## Wiring Diagram
-![alt text](images/wire diagram.png "Wiring diagram")
+![alt text](images/wiring_diagram.png "Wiring diagram")
 
 ## State Diagram
-![alt text](images/state diagram.png "State diagram")
+![alt text](images/state_diagram.png "State diagram")
 
 ## Installation
 Use Arduino IDE.
