@@ -4,9 +4,9 @@
 // State
 unsigned long currentMillis = millis();
 
-// 0 is valve idle (free to operate)
-// 1 is valve opened (not free to operate)
-// 2 is valve disabled (not free to operate)
+// 0 : Idle. Valve idle (free to operate)
+// 1 : Open. Valve opened (not free to operate)
+// 2 : Closed. Valve disabled (not free to operate)
 int state = 0;
 
 bool sensorState = LOW;
@@ -20,9 +20,10 @@ int timeCount = 0;
 
 #ifdef WIFI_ENABLED
   #include <WiFi.h>
+  #include <WebServer.h>
   #include "ota.h"
   #include "wifi.h"
-  #include <WebServer.h>
+  #include "server.h"
 #endif
 
 #ifdef DISPLAY_ENABLED
@@ -46,7 +47,7 @@ void setup(void) {
    
 void updateLoop() {  
   readPir();
-  updateValve(sensorState, timeCount);
+  updateValve();
   #ifdef DISPLAY_ENABLED
     updateDisplay(); 
   #endif

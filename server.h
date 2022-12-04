@@ -50,7 +50,6 @@ void initializeWebServer() {
   server.begin();
 }
 
-
 void serveWebServerClient() {
   server.handleClient();
 }  

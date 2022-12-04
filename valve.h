@@ -42,7 +42,7 @@ void disableValveUntilTimeOut(){
   }    
 }
 
-void updateValve(bool sensorState, int &timeCount){
+void updateValve(){
   switch (state){
     case 0:
       openValveIfTriggered(sensorState);
