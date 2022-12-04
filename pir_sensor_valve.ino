@@ -1,39 +1,66 @@
-#include <WiFi.h>
-unsigned long currentMillis = millis();
-
 // Config
 #include "config.h"
 
+// State
+unsigned long currentMillis = millis();
+
+// 0 is valve idle (free to operate)
+// 1 is valve opened (not free to operate)
+// 2 is valve disabled (not free to operate)
+int state = 0;
+
+bool sensorState = LOW;
+bool valveState = LOW;
+int timeCount = 0;
+
+
 // Dependencies
-#include "display.h"
-#include "ota.h"
 #include "valve.h"
 #include "pir.h"
-#include "wifi.h"
 
-int timeCount = 0;
+#ifdef WIFI_ENABLED
+  #include <WiFi.h>
+  #include "ota.h"
+  #include "wifi.h"
+  #include <WebServer.h>
+#endif
+
+#ifdef DISPLAY_ENABLED
+  #include "display.h"
+#endif
 
 void setup(void) {
   // Serial
   Serial.begin(115200);
 
-  initializeWifi();
+  #ifdef WIFI_ENABLED
+    initializeWifi();
+    initializeWebServer();
+  #endif
   initializePir();
   initializeValve();
-  initializeDisplay();
+  #ifdef DISPLAY_ENABLED
+    initializeDisplay();
+  #endif
 }
    
 void updateLoop() {  
-  bool sensorState = readPir();
-  int valveState = updateValve(sensorState, timeCount);
-  updateDisplay(valveState, sensorState, timeCount); 
-  
-  delay(100);
+  readPir();
+  updateValve(sensorState, timeCount);
+  #ifdef DISPLAY_ENABLED
+    updateDisplay(); 
+  #endif
+  #ifdef WIFI_ENABLED
+    serveWebServerClient();
+  #endif  
+  delay(1000);
 }
 
 void loop() {
   currentMillis = millis();
-  connectWifiWhenNeeded();
-  handleOTA();
+  #ifdef WIFI_ENABLED 
+    connectWifiWhenNeeded();
+    handleOTA();
+  #endif
   updateLoop();
 }

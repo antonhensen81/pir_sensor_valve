@@ -7,16 +7,15 @@ void initializePir(){
 
 void updateStatusLed(bool sensorState) {
   if (sensorState != previousSensorState) {
-    Serial.print("Sensor state changed to: ");
-    Serial.println(sensorState);
+//    Serial.print("sensor:");
+//    Serial.println(sensorState);
     
     digitalWrite(gpioPIRStatusLED, sensorState);
     previousSensorState = sensorState;
   }
 }
 
-bool readPir(){
-  bool sensorState = digitalRead(gpioPIR);
-  updateStatusLed(sensorState);
-  return sensorState;
+void readPir() {
+  sensorState = digitalRead(gpioPIR); 
+  updateStatusLed(sensorState);  
 }

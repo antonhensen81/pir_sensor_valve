@@ -16,9 +16,10 @@ void initializeDisplay() {
   tft.fillScreen(TFT_BLACK);
 }
 
+#ifdef WIFI_ENABLED
 String getIpAddressString() {
   if (WiFi.status() != WL_CONNECTED) {
-    Serial.print(".");
+    //Serial.print(".");
     if (lastConnectionStatus == true){
       lastConnectionStatus = false;
       shouldUpdateDisplay = true;
@@ -33,10 +34,9 @@ String getIpAddressString() {
     return WiFi.localIP().toString();
   }  
 }
+#endif
 
-void updateDisplay(int valveState, bool sensorState, int timeCount) {
-  String ipAddress = getIpAddressString();
-  
+void updateDisplay() {  
   if (previousValveState != valveState ){
     shouldUpdateDisplay = true;
   }
@@ -51,13 +51,15 @@ void updateDisplay(int valveState, bool sensorState, int timeCount) {
   
   if (shouldUpdateDisplay){
     tft.fillScreen(TFT_BLACK);
-    
-    tft.setTextDatum(MC_DATUM); // middle center
     tft.setTextSize(1);
-    tft.drawString(ipAddress, 120, 35, 4);
 
-    tft.setTextDatum(ML_DATUM ); // middle left  
-  
+    #ifdef WIFI_ENABLED
+      String ipAddress = getIpAddressString();    
+      tft.setTextDatum(MC_DATUM); // middle center
+      tft.drawString(ipAddress, 120, 35, 4);
+    #endif
+
+    tft.setTextDatum(ML_DATUM ); // middle left    
     tft.drawString("valve:",10, 65,4);
     switch (valveState)
     {
@@ -86,8 +88,6 @@ void updateDisplay(int valveState, bool sensorState, int timeCount) {
     previousValveState = valveState;
     stateSensorPrevious = sensorState;
     previousTimeCount = timeCount;
-
-    Serial.println(timeCount);
     
     shouldUpdateDisplay = false;    
   }   
