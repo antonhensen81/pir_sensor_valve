@@ -22,5 +22,6 @@ Use Arduino IDE.
 - Uncomment: #include <User_Setups/Setup25_TTGO_T_Display.h>    // Setup file for ESP32 and TTGO T-Display ST7789V SPI bus TFT
 - Save
 - Set wifi ssid and password in the config.h file (note that it will connect to that network, not starting a new one)
+- Upload SPIFFS data (Tools -> ESP32 Sketch Data Upload)
 - Compile and run (Board:TTGO Lora32-OLED v1)
 
