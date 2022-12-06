@@ -1,0 +1,107 @@
+<!DOCTYPE html> <html>
+<head><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Valve Control</title>
+<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}
+body{margin-top: 50px;} h1 {color: #444444;margin: 50px auto 30px;} h3 {color: #444444;margin-bottom: 50px;}
+.button {display: block;width: 80px;background-color: #3498db;border: none;color: white;padding: 13px 30px;text-decoration: none;font-size: 25px;margin: 0px auto 35px;cursor: pointer;border-radius: 4px;}
+.button-on {background-color: #3498db;}
+.button-on:active {background-color: #2980b9;}
+.button-off {background-color: #34495e;}
+.button-off:active {background-color: #2c3e50;}
+p {font-size: 14px;color: #888;margin-bottom: 10px;}
+</style>
+</head>
+<body>
+<h1>Valve Controller</h1>
+<div>
+  <canvas id="chart" style="position: relative; height:40vh; width:80vw">></canvas>
+</div>
+
+<div id="data">
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+  const ctx = document.getElementById('chart');
+  
+  let value1 = 0;
+  let value2 = 0;
+  let value3 = 0;
+  let values1 = [];
+  let values2 = [];
+  let values3 = [];
+  let labels = [];
+
+  let chart = new Chart(ctx, {
+		type: 'line',
+		data: {
+		  labels: labels,
+		  datasets: [{
+			label: 'State',
+			data: values1,
+			borderWidth: 5
+		  },
+		  {
+			label: 'Sensor',
+			data: values2,
+			borderWidth: 5
+		  },
+		  {
+			label: 'Valve',
+			data: values3,
+			borderWidth: 5
+		  }
+		  
+		  
+		  ]
+		},
+		options: {
+		  scales: {
+			y: {
+			  beginAtZero: true
+			}
+		  }
+		}
+	  });
+
+  function requestState() {
+    var xhttp = new XMLHttpRequest();
+
+	xhttp.onreadystatechange = () => {
+		if (xhttp.readyState === 4) {
+			var parsed = JSON.parse(xhttp.response);
+			value1 = parsed.state;
+			value2 = parsed.sensorState;
+			value3 = parsed.valveState;
+			updateChart();
+		}
+	}
+	
+	xhttp.open("GET", "/state");
+	xhttp.send();
+  }
+  
+  function updateChart() {
+	var currentdate = new Date(); 
+	var datetime = currentdate.getHours() + ":"  
+				   + currentdate.getMinutes() + ":" 
+				   + currentdate.getSeconds();
+
+	labels.push(datetime);
+	values1.push(value1);
+	values2.push(value2);
+	values3.push(value3);
+	
+	chart.data.datasets[0].data = values1;
+	chart.data.datasets[1].data = values2;
+	chart.data.datasets[2].data = values3;
+	
+	chart.data.labels = labels;
+	chart.update();
+  }
+  
+  setInterval(requestState, 1000);
+</script>
+</body>
+</html>

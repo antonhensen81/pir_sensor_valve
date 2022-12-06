@@ -21,6 +21,10 @@ int timeCount = 0;
 #ifdef WIFI_ENABLED
   #include <WiFi.h>
   #include <WebServer.h>
+  #include "ESPAsyncWebServer.h"
+  #include "AsyncJson.h"
+  #include "ArduinoJson.h"
+  #include "SPIFFS.h"
   #include "ota.h"
   #include "wifi.h"
   #include "server.h"
@@ -51,9 +55,6 @@ void updateLoop() {
   #ifdef DISPLAY_ENABLED
     updateDisplay(); 
   #endif
-  #ifdef WIFI_ENABLED
-    serveWebServerClient();
-  #endif  
   delay(1000);
 }
 
