@@ -57,6 +57,7 @@ void initializeWebServer() {
     Serial.println(json_string);
     
     if(file.println(json_string)) {
+      file.flush();
       request->redirect("/");
     }else {
       request->send(404, "text/plain", "Failed to update settings");
