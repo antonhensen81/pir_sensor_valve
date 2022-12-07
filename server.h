@@ -13,12 +13,7 @@ int getParameter(AsyncWebServerRequest *request, String name){
   return result;
 }
 
-void initializeWebServer() {
-   // Initialize SPIFFS
-  if(!SPIFFS.begin(true)){
-    Serial.println("An Error has occurred while mounting SPIFFS");
-    return;
-  }
+void initializeWebServer() {  
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(SPIFFS, "/index.html", String(), false);
   });
@@ -48,7 +43,25 @@ void initializeWebServer() {
     maximumValveOpenTimeInSeconds = getParameter(request, "maximumValveOpenTimeInSeconds");
     disableValveAfterCloseInSeconds = getParameter(request, "disableValveAfterCloseInSeconds");
     openValveAfterInactivityInSeconds = getParameter(request, "openValveAfterInactivityInSeconds");
-    request->redirect("/");
+
+    char json_string[1024];
+    DynamicJsonDocument json(1024);
+    json["maximumValveOpenTimeInSeconds"] = maximumValveOpenTimeInSeconds;
+    json["disableValveAfterCloseInSeconds"] = disableValveAfterCloseInSeconds;
+    json["openValveAfterInactivityInSeconds"] = openValveAfterInactivityInSeconds;
+    serializeJson(json, json_string);
+    
+    File file = SPIFFS.open("/settings", FILE_WRITE);
+
+    Serial.print("JSON:");
+    Serial.println(json_string);
+    
+    if(file.println(json_string)) {
+      request->redirect("/");
+    }else {
+      request->send(404, "text/plain", "Failed to update settings");
+    }
+//    ESP.restart();
   });
   server.onNotFound([](AsyncWebServerRequest *request){
     request->send(404, "text/plain", "The content you are looking for was not found.");

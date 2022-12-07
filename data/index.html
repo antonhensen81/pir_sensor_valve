@@ -22,6 +22,10 @@ td{
 input{
 	width:100px;
 }
+.formInputSeconds{
+	pointer-events: none;
+	border:0px;
+}
 label{
   padding:5px;
   font-weight: 200!important;
@@ -47,7 +51,7 @@ label{
 				<input class="form-control col-4" style="width:240px" id="maximumValveOpenTimeInSeconds_picker" >
 				<div style="margin: 10px">
 					<label>Total seconds : </label>
-					<input type="text" id="maximumValveOpenTimeInSeconds" name="maximumValveOpenTimeInSeconds"></input>
+					<input type="text" class="formInputSeconds" id="maximumValveOpenTimeInSeconds" name="maximumValveOpenTimeInSeconds"></input>
 				</div>
 			</td>
 		</tr>
@@ -57,7 +61,7 @@ label{
 				<input class="form-control col-4" style="width:240px" id="disableValveAfterCloseInSeconds_picker" >
 				<div style="margin: 10px">
 					<label>Total seconds : </label>
-					<input type="text" id="disableValveAfterCloseInSeconds" name="disableValveAfterCloseInSeconds"></input>
+					<input type="text" class="formInputSeconds" id="disableValveAfterCloseInSeconds" name="disableValveAfterCloseInSeconds"></input>
 				</div>			
 			</td>
 		</tr>
@@ -67,7 +71,7 @@ label{
 				<input class="form-control col-4" style="width:240px" id="openValveAfterInactivityInSeconds_picker" >
 				<div style="margin: 10px">
 					<label>Total seconds : </label>
-					<input type="text" id="openValveAfterInactivityInSeconds" name="openValveAfterInactivityInSeconds"></input>
+					<input type="text" class="formInputSeconds" id="openValveAfterInactivityInSeconds" name="openValveAfterInactivityInSeconds"></input>
 				</div>
 			</td>
 		</tr>

@@ -25,12 +25,12 @@ p {font-size: 14px;color: #888;margin-bottom: 10px;}
 
   const ctx = document.getElementById('chart');
   
-  let value1 = 0;
-  let value2 = 0;
-  let value3 = 0;
-  let values1 = [];
-  let values2 = [];
-  let values3 = [];
+  let state = 0;
+  let sensorState = 0;
+  let valveState = 0;
+  let stateValues = [];
+  let sensorValues = [];
+  let valveValues = [];
   let labels = [];
 
   let chart = new Chart(ctx, {
@@ -38,18 +38,18 @@ p {font-size: 14px;color: #888;margin-bottom: 10px;}
 		data: {
 		  labels: labels,
 		  datasets: [{
-			label: 'State',
-			data: values1,
+			label: 'State (0 = Idle, 1 = Open, 2 = Closed)',
+			data: stateValues,
 			borderWidth: 5
 		  },
 		  {
-			label: 'Sensor',
-			data: values2,
+			label: 'Sensor (0 = Idle, 1 = Triggered)',
+			data: sensorValues,
 			borderWidth: 5
 		  },
 		  {
-			label: 'Valve',
-			data: values3,
+			label: 'Valve (0 = Closed, 1 = Opened)',
+			data: valveValues,
 			borderWidth: 5
 		  }
 		  
@@ -59,7 +59,8 @@ p {font-size: 14px;color: #888;margin-bottom: 10px;}
 		options: {
 		  scales: {
 			y: {
-			  beginAtZero: true
+			  min:-0.5,
+			  max:2.5
 			}
 		  }
 		}
@@ -71,9 +72,9 @@ p {font-size: 14px;color: #888;margin-bottom: 10px;}
 	xhttp.onreadystatechange = () => {
 		if (xhttp.readyState === 4) {
 			var parsed = JSON.parse(xhttp.response);
-			value1 = parsed.state;
-			value2 = parsed.sensorState;
-			value3 = parsed.valveState;
+			state = parsed.state;
+			sensorState = parsed.sensorState;
+			valveState = parsed.valveState;
 			updateChart();
 		}
 	}
@@ -89,13 +90,13 @@ p {font-size: 14px;color: #888;margin-bottom: 10px;}
 				   + currentdate.getSeconds();
 
 	labels.push(datetime);
-	values1.push(value1);
-	values2.push(value2);
-	values3.push(value3);
+	stateValues.push(state);
+	sensorValues.push(sensorState);
+	valveValues.push(valveState);
 	
-	chart.data.datasets[0].data = values1;
-	chart.data.datasets[1].data = values2;
-	chart.data.datasets[2].data = values3;
+	chart.data.datasets[0].data = stateValues;
+	chart.data.datasets[1].data = sensorValues;
+	chart.data.datasets[2].data = valveValues;
 	
 	chart.data.labels = labels;
 	chart.update();
