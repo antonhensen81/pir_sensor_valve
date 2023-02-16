@@ -1,4 +1,5 @@
 unsigned long lastStateChange = millis();
+bool triggeredByTimeOut = false;
 
 void initializeValve() {
   pinMode(gpioValve, OUTPUT);
@@ -19,6 +20,7 @@ void openValveIfIdleForTooLong(){
     //Serial.println("Opening valve because of long inactivity");
     digitalWrite(gpioValve, HIGH);
     state = 1;
+    triggeredByTimeOut = true;
     valveState = HIGH;
     lastStateChange = millis();
   }
@@ -31,6 +33,13 @@ void closeValveAfterTimeOut() {
     valveState = LOW;
     state = 2;
     lastStateChange = millis();
+
+
+    if (triggeredByTimeOut){
+      triggeredByTimeOut = false;
+      ESP.restart();
+      esp_restart();
+    }
   }  
 }
 
