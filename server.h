@@ -15,6 +15,9 @@ int getParameter(AsyncWebServerRequest *request, String name){
 
 void initializeWebServer() {  
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+    if (!request->authenticate(www_username, www_password)) {
+      request->requestAuthentication(NULL, false);
+    }
     request->send(SPIFFS, "/index.html", String(), false);
   });
   server.on("/live", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -40,6 +43,9 @@ void initializeWebServer() {
   });
 
   server.on("/updateSettings", HTTP_POST, [](AsyncWebServerRequest *request) {
+    if (!request->authenticate(www_username, www_password)) {
+      request->requestAuthentication(NULL, false);
+    }
     maximumValveOpenTimeInSeconds = getParameter(request, "maximumValveOpenTimeInSeconds");
     disableValveAfterCloseInSeconds = getParameter(request, "disableValveAfterCloseInSeconds");
     openValveAfterInactivityInSeconds = getParameter(request, "openValveAfterInactivityInSeconds");

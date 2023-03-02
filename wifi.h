@@ -36,6 +36,9 @@ void connectWifiWhenNeeded() {
   {
     Serial.print("Connection state changed to ");
     Serial.println(connectedState);
+    if (connectedState){
+      Serial.println(WiFi.localIP());
+    }
     connectedOldState = connectedState;
   }
 }

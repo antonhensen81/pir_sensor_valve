@@ -57,18 +57,26 @@ void readSettings()
     String maximumValveOpenTimeInSecondsConfig = doc["maximumValveOpenTimeInSeconds"];
     String disableValveAfterCloseInSecConfig = doc["disableValveAfterCloseInSeconds"];
     String openValveAfterInactivityInSeConfig = doc["openValveAfterInactivityInSeconds"];
-
-
+      
     Serial.print(" maximumValveOpenTimeInSecondsConfig : ");
     Serial.println(maximumValveOpenTimeInSecondsConfig);
     Serial.print(" disableValveAfterCloseInSecConfig : ");
     Serial.println(disableValveAfterCloseInSecConfig);
     Serial.print(" openValveAfterInactivityInSeConfig : ");
     Serial.println(openValveAfterInactivityInSeConfig);
-    
-    maximumValveOpenTimeInSeconds = maximumValveOpenTimeInSecondsConfig.toInt();
-    disableValveAfterCloseInSeconds = disableValveAfterCloseInSecConfig.toInt();
-    openValveAfterInactivityInSeconds = openValveAfterInactivityInSeConfig.toInt();
+
+    if (doc.containsKey("maximumValveOpenTimeInSeconds") && maximumValveOpenTimeInSecondsConfig.toInt()>0)
+    {
+      maximumValveOpenTimeInSeconds = maximumValveOpenTimeInSecondsConfig.toInt();
+    }
+    if (doc.containsKey("disableValveAfterCloseInSeconds") && disableValveAfterCloseInSecConfig.toInt()>0)
+    {
+      disableValveAfterCloseInSeconds = disableValveAfterCloseInSecConfig.toInt();
+    }
+    if (doc.containsKey("openValveAfterInactivityInSeconds") && openValveAfterInactivityInSeConfig.toInt()>0 )
+    {
+      openValveAfterInactivityInSeconds = openValveAfterInactivityInSeConfig.toInt();
+    }
 
     Serial.print(" maximumValveOpenTimeInSeconds : ");
     Serial.println(maximumValveOpenTimeInSeconds);

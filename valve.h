@@ -7,7 +7,7 @@ void initializeValve() {
 
 void openValveIfTriggered(bool sensorState){
   if (sensorState) {
-    //Serial.println("Opening valve because of sensor trigger");
+    Serial.println("Opening valve because of sensor trigger");
     digitalWrite(gpioValve, HIGH);
     valveState = HIGH;
     state = 1;
@@ -17,7 +17,7 @@ void openValveIfTriggered(bool sensorState){
 
 void openValveIfIdleForTooLong(){
   if (millis() - lastStateChange > openValveAfterInactivityInSeconds * 1000) {
-    //Serial.println("Opening valve because of long inactivity");
+    Serial.println("Opening valve because of long inactivity");
     digitalWrite(gpioValve, HIGH);
     state = 1;
     triggeredByTimeOut = true;
@@ -28,25 +28,26 @@ void openValveIfIdleForTooLong(){
 
 void closeValveAfterTimeOut() {
   if (millis() - lastStateChange > maximumValveOpenTimeInSeconds * 1000) {
-    //Serial.println("Closing valve");
+    Serial.println("Closing valve");
     digitalWrite(gpioValve, LOW);
     valveState = LOW;
     state = 2;
     lastStateChange = millis();
-
-
-    if (triggeredByTimeOut){
-      triggeredByTimeOut = false;
-      ESP.restart();
-      esp_restart();
-    }
   }  
 }
 
 void disableValveUntilTimeOut(){
   if (millis() - lastStateChange > disableValveAfterCloseInSeconds * 1000) {
-    //Serial.println("Setting idle mode");
+    Serial.println("Setting idle mode");
     state = 0;
+    
+    if (triggeredByTimeOut && resetAfterInactivity){
+      triggeredByTimeOut = false;
+      Serial.println("RESET!!!");
+      ESP.restart();
+      esp_restart();
+    }
+    
     lastStateChange = millis();
   }    
 }
