@@ -2,6 +2,7 @@
 #define WIFI_ENABLED                           // comment this out to disable WiFi
 const char* ssid       = "Your SSID here";     // WiFi SSID (network name)
 const char* password   = "Your password here"; // Wifi Password
+const bool resetAfterInactivity = true;		   // Reset the ESP32 after inactivity state
 bool useStaticIp = false;                      // when set to false it will obtain an IP address via DHCP and ignore the settings below
                                                // when set to true it will use IP addresses defined below
   IPAddress local_IP(192, 168, 0, 200);
